@@ -1,0 +1,24 @@
+{
+  "name": "mytinerary-back",
+  "version": "1.0.0",
+  "description": "Mi aplicación MyTinerary",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "start": "node index.js",
+    "dev":"nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuuGolis/MyTinerary-Back.git"
+  },
+  "author": "Luu Golis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuuGolis/MyTinerary-Back/issues"
+  },
+  "homepage": "https://github.com/LuuGolis/MyTinerary-Back#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
