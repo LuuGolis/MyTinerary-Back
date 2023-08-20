@@ -76,3 +76,5 @@ const cities = [
         country: "China"
     }
 ]
+
+export default cities

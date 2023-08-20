@@ -8,8 +8,6 @@ const server = express()
 
 server.use('/api', indexRouter)
 
-
-
 server.get('/', (request, response, next) =>{
     response.send('Bienvenido a mi server / :)')
 })
