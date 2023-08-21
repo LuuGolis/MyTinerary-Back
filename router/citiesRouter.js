@@ -5,6 +5,7 @@ const citiesRouter = Router()
 
 citiesRouter.get('', citiesController.getAllCities)
 citiesRouter.get('/one', citiesController.getOneCity)
+citiesRouter.post('/', citiesController.createOneCity)
 
 
 export default citiesRouter
