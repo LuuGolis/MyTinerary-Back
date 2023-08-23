@@ -4,9 +4,10 @@ import City from "../Models/City.js"
 
 const citiesController = {
     getAllCities: async (request, response, next) => {
-        /*  const allCities = await City.find({
-              name:
-          })*/
+        const query = {}
+        if(request.query.name){
+            query.name = { $regex: request.query.name, $options: 'i'}
+        }
         let cities;
         let error = null
         let success = true;
@@ -52,13 +53,9 @@ const citiesController = {
         let error = null
         let success = true;
         try {
-            /* const newCity = new City(request.body)
-             
-             await newCity.save()
-             console.log(newCity);*/
-            city = await City.create(request.body)
-            console.log(city);
-            //await City.create(request.body)
+        
+            cities = await City.create(request.body)
+            
         } catch (err) {
             console.log(err);
             success = false;
@@ -69,6 +66,48 @@ const citiesController = {
             success,
             error
         })
+
+    },
+    updateOneCity: async (request, response, next) => {
+        let city
+        const { id } = request.params
+        let error = null
+        let success = true
+        console.log(request.body);
+        
+        try {
+            city = await City.findOneAndUpdate( {_id: id}, request.body, { new:true })
+            response.json({
+                response: city,
+                success,
+                error
+            })
+        } catch (err) {
+            console.log(err);
+            success = false;
+            error = err;
+        }
+       
+
+    },
+    deleteOneCity: async (request, response, next) => {
+        let city
+        const { id } = request.params
+        let error = null
+        let success = true
+        console.log(request.body);
+        
+        try {
+            city = await City.findOneAndDelete( {_id: id})
+            response.json({
+                response: city,
+                success
+            })
+        } catch (err) {
+            success = false;
+            error = err;
+        }
+
 
     }
 
