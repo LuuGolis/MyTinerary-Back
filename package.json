@@ -20,6 +20,10 @@
   "homepage": "https://github.com/LuuGolis/MyTinerary-Back#readme",
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
+=======
+    "dotenv": "^16.3.1",
+>>>>>>> tests
     "express": "^4.18.2",
     "mongoose": "^7.4.3"
   }
