@@ -1,18 +1,18 @@
 import { request, response } from "express";
-import cities from "../cities.js";
 import City from "../Models/City.js"
 
 const citiesController = {
-    getAllCities: async (request, response, next) => {
+    getAllCities: async (request, response) => {
         const query = {}
+        let error = null
+        let success = true;
+
         if(request.query.name){
             query.name = { $regex: request.query.name, $options: 'i'}
         }
-        let cities;
-        let error = null
-        let success = true;
+        
         try {
-            cities = await City.find()
+          const  cities = await City.find( query )
 
             response.json({
                 response: cities,
@@ -27,15 +27,12 @@ const citiesController = {
             error = err;
         }
     },
-    getOneCity: async (request, response, next) => {
-        console.log(request.params);
-        const { _name } = request.params
-        let cities;
+    getOneCity: async (request, response) => {
         let error = null
         let success = true;
 
         try {
-            cities = await City.findOne({ name: _name })
+         const   cities = await City.findById( req.params.id )
         } catch (err) {
             console.log(err);
             success = false;
