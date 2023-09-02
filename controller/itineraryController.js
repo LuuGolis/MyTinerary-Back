@@ -9,7 +9,7 @@ const itineraryController = {
         
             response.json({
                 response: itineraries,
-                succes,
+                success,
                 error
             })
 
@@ -62,11 +62,12 @@ const itineraryController = {
     },
     createItinerary: async (request, response) => {
         console.log(request.body);
+        let itineraries
         let error = null
         let success = true;
         try {
         
-           const  itineraries = await Itinerary.create(request.body)
+             itineraries = await Itinerary.create(request.body)
             
         } catch (err) {
             console.log(err);
