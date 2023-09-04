@@ -30,9 +30,9 @@ const citiesController = {
     getOneCity: async (request, response) => {
         let error = null
         let success = true;
-
+let cities
         try {
-         const   cities = await City.findById( req.params.id )
+            cities = await City.findById( request.params.id )
         } catch (err) {
             console.log(err);
             success = false;

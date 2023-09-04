@@ -5,7 +5,8 @@ const itineraryController = {
         let error = null
         let success = true
          try {
-            const itineraries = await Itinerary.find()
+            const itineraries = await Itinerary.find().populate('city')
+            response.json( itineraries)
         
             response.json({
                 response: itineraries,
@@ -21,12 +22,12 @@ const itineraryController = {
          }
     },
 
-    getItinerary: async (request, response) =>{
+    getItinerary: async (req, response) =>{
         let error = null
         let success = true
-
+        let itineraries
         try{
-            const itineraries = await Itinerary.findById( req.params.id)
+             itineraries = await Itinerary.findById( req.params.id).populate('city')
       
     } catch (err) {
         console.log(err);
@@ -35,8 +36,8 @@ const itineraryController = {
        
      }
      response.json({
-        response: itineraries,
-        succes,
+        response:itineraries,
+        success,
         error
     })
     },
