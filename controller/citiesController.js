@@ -1,62 +1,39 @@
-import { request, response } from "express";
+
 import City from "../Models/City.js"
 
-const citiesController = {
-    getAllCities: async (request, response) => {
+
+   export const getAllCities= async (request, response) => {
         const query = {}
-        let error = null
-        let success = true;
 
         if(request.query.name){
             query.name = { $regex: request.query.name, $options: 'i'}
         }
         
         try {
-          const  cities = await City.find( query )
-
-            response.json({
-                response: cities,
-                success,
-                error
-            })
+          const  cities = await City.find( query ).populate({path: 'itineraries'})
+          response.status(200).json({status:200, success:true, response: cities})
 
         } catch (err) {
-
-            console.log(err);
-            success = false;
-            error = err;
+response.status(500).json({message:err})
         }
-    },
-    getOneCity: async (request, response) => {
-        let error = null
-        let success = true;
-let cities
+    }
+    export const getOneCity = async (request, response) => {
+        
+
         try {
-            cities = await City.findById( request.params.id )
+          const  cities = await City.findById( request.params.id ).populate({path:'itineraries'})
+          response.status(200).json( { cities: cities})
         } catch (err) {
-            console.log(err);
-            success = false;
-            error = err;
+            response.status(500).json(err)
         }
-        response.json({
-            response: cities,
-            success,
-            error
-        })
-    },
-    createOneCity: async (request, response, next) => {
-        console.log(request.body);
-        let cities;
-        let error = null
-        let success = true;
+    }
+    export const createOneCity = async (request, response) => {
         try {
         
-            cities = await City.create(request.body)
-            
-        } catch (err) {
-            console.log(err);
-            success = false;
-            error = err;
+           const cities = await City.create(request.body)
+           res.status(201).json( { cities: cities } )
+        } catch (error) {
+            res.status(500).json( error )
         }
         response.json({
             response: cities,
@@ -64,8 +41,8 @@ let cities
             error
         })
 
-    },
-    updateOneCity: async (request, response, next) => {
+    }
+    export const updateOneCity = async (request, response, next) => {
         let city
         const { id } = request.params
         let error = null
@@ -86,8 +63,8 @@ let cities
         }
        
 
-    },
-    deleteOneCity: async (request, response, next) => {
+    }
+    export const deleteOneCity= async (request, response, next) => {
         let city
         const { id } = request.params
         let error = null
@@ -108,10 +85,3 @@ let cities
 
     }
 
-
-}
-
-
-
-
-export default citiesController

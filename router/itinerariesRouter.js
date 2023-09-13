@@ -1,13 +1,13 @@
 import { Router } from "express";
-import itineraryController from "../controller/itineraryController.js";
+import { getAllItineraries, getItinerary,getItineraryByCity , createItinerary, updateItinerary, deleteItinerary} from '../controller/itineraryController.js'
 
 const itinerariesRouter = Router()
 
-itinerariesRouter.get('/', itineraryController.getAllItineraries)
-itinerariesRouter.get('/:id', itineraryController.getItinerary)
-itinerariesRouter.get('/:name', itineraryController.getItineraryByCity)
-itinerariesRouter.post('/', itineraryController.createItinerary)
-itinerariesRouter.put('/:id', itineraryController.updateItinerary)
-itinerariesRouter.delete('/:id', itineraryController.deleteItinerary)
+itinerariesRouter.get('/', getAllItineraries)
+itinerariesRouter.get('/:id', getItinerary)
+itinerariesRouter.get('/city/:id', getItineraryByCity)
+itinerariesRouter.post('/', createItinerary)
+itinerariesRouter.put('/:id', updateItinerary)
+itinerariesRouter.delete('/:id', deleteItinerary)
 
 export default itinerariesRouter

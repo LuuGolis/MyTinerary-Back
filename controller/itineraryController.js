@@ -1,79 +1,53 @@
 import Itinerary from "../Models/Itinerary.js";
+import City from "../Models/City.js";
 
-const itineraryController = {
-    getAllItineraries: async (request, response) => {
-        let error = null
-        let success = true
+export const getAllItineraries = async (request, response) => {
+        
          try {
             const itineraries = await Itinerary.find().populate('city')
-            response.json( itineraries)
-        
-            response.json({
-                response: itineraries,
-                success,
-                error
-            })
-
+            response.status(200).json( { itineraries: itineraries})
         } catch (err) {
-            console.log(err);
-            success = false;
-            error = err;
-           
-         }
-    },
-
-    getItinerary: async (req, response) =>{
-        let error = null
-        let success = true
-        let itineraries
-        try{
-             itineraries = await Itinerary.findById( req.params.id).populate('city')
-      
-    } catch (err) {
-        console.log(err);
-        success = false;
-        error = err;
-       
-     }
-     response.json({
-        response:itineraries,
-        success,
-        error
-    })
-    },
-
-    getItineraryByCity: async(request,response)=> {
-        console.log(request.params);
-        const { _name } = request.params
-        let error = null
-        let success = true;
-
-        try {
-          const  itineraries = await Itinerary.findOne({ name: _name })
-        } catch (err) {
-            console.log(err);
-            success = false;
-            error = err;
+            response.status(500).json(err)
         }
-        response.json({
-            response: itineraries,
-            success,
-            error
-        })
-    },
-    createItinerary: async (request, response) => {
-        console.log(request.body);
-        let itineraries
-        let error = null
-        let success = true;
+    }
+
+    //
+
+   export const  getItinerary = async (req, response) =>{
+        try{
+           const  itineraries = await Itinerary.findById( req.params.id).populate('city')
+             response.status(200).json( { status:200, success:true, response: itineraries})
+            } catch (err) {
+                response.status(500).json(err)
+    }
+   }
+    export const  getItineraryByCity = async (req, response) =>{
+        try{
+            const itineraries = await Itinerary.find({city: req.params.id}).populate('city')
+             response.status(200).json( { status:200, success:true, response: itineraries})
+            } catch (err) {
+                response.status(500).json(err)
+    }
+
+}
+    export const createItinerary = async (request, response) => {
+
         try {
-        
+            const newItinerary = { ...request.body}
+            const city = await City.findOne({ city: request.body.city })
              itineraries = await Itinerary.create(request.body)
+             if (city){
+                newItinerary.city = city._id
+             }else{
+                const newCity = await City.create({city: request.body.city})
+                newItinerary.city = newCity._id
+             }
+             const itinerary = await Itinerary.create(newItinerary)
+             await City.findOneAndUpdate({ _id: newItinerary.city}, {$push:{itineraries: itinerary._id}})
+             response.status(201).json({newItinerary: itinerary})
             
         } catch (err) {
-            console.log(err);
-            success = false;
-            error = err;
+            response.status(500).json({message: err})
         }
         response.json({
             response: itineraries,
@@ -81,8 +55,30 @@ const itineraryController = {
             error
         })
 
-    },
-    updateItinerary: async (request, response) => {
+    }
+    export const createItineries = async(request, response) =>{
+        try {
+            for (const item of req.body){
+                const { city } = item
+                const newItinerary = {...item}
+                const aux = await City.findOne({ city: city })
+
+                if(aux){
+                    newItinerary.city = aux._id
+                }else {
+                    const newCity = await City.create({ city: city})
+                    newItinerary.city = newCity._id
+                }
+                const itinerary = await Itinerary.create(newItinerary)
+                await City.findOneAndUpdate({ city:city }, { $push: { itineraries: itinerary._id}})
+            }
+            response.status(200).json({succes:true})
+        }
+        catch(err){
+            response.status(500).json({message:err})
+        }
+    }
+    export const updateItinerary = async (request, response) => {
         const { id } = request.params
         let error = null
         let success = true
@@ -102,8 +98,8 @@ const itineraryController = {
         }
        
 
-    },
-    deleteItinerary: async (request, response) => {
+    }
+    export const deleteItinerary = async (request, response) => {
         const { id } = request.params
         let error = null
         let success = true
@@ -122,7 +118,3 @@ const itineraryController = {
 
 
     }
-
-}
-
-export default itineraryController
