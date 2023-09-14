@@ -30,33 +30,32 @@ export const getAllItineraries = async (request, response) => {
     }
 
 }
-    export const createItinerary = async (request, response) => {
+export const createItinerary = async (request, response) => {
 
-        try {
-            const newItinerary = { ...request.body}
-            const city = await City.findOne({ city: request.body.city })
-             itineraries = await Itinerary.create(request.body)
-             if (city){
-                newItinerary.city = city._id
-             }else{
-                const newCity = await City.create({city: request.body.city})
-                newItinerary.city = newCity._id
-             }
-             const itinerary = await Itinerary.create(newItinerary)
-             await City.findOneAndUpdate({ _id: newItinerary.city}, {$push:{itineraries: itinerary._id}})
-             response.status(201).json({newItinerary: itinerary})
-            
-        } catch (err) {
-            response.status(500).json({message: err})
-        }
-        response.json({
-            response: itineraries,
-            success,
-            error
-        })
+    try {
+        const newItinerary = { ...request.body}
 
+        const city = await City.findOne({ city: request.body.city })
+
+
+         if (city){
+            newItinerary.city = city._id
+         }/* else{
+            const newCity = await City.create({city: request.body.city})
+            newItinerary.city = newCity._id
+         } */
+         const itinerary = await Itinerary.create(newItinerary)
+         await City.findOneAndUpdate({ _id: newItinerary.city}, {$push:{itineraries: itinerary._id}})
+         response.status(201).json({newItinerary: itinerary})
+        
+    } catch (err) {
+        response.status(500).json({message: err})
     }
-    export const createItineries = async(request, response) =>{
+   
+
+}
+     /* 
+    export const createItineries = async(req, response) =>{
         try {
             for (const item of req.body){
                 const { city } = item
@@ -77,7 +76,7 @@ export const getAllItineraries = async (request, response) => {
         catch(err){
             response.status(500).json({message:err})
         }
-    }
+    } */
     export const updateItinerary = async (request, response) => {
         const { id } = request.params
         let error = null
