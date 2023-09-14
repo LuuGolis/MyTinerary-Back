@@ -20,9 +20,9 @@ export const signUp = async (req, res) => {
 
         const newUser = await User.create(newObj)
 
-        const userResponse = { email: userInDb.email, img: userInDb.img, name: userInDb.name, id: userInDb._id}
+        const userResponse = { email: userInDb.email, img: userInDb.img, name: userInDb.name, id: userInDb._id }
 
-        const token = jwt.sign({ name: userInDb.name }, "keykey321")
+        const token = jwt.sign({ email: userInDb.email }, "keykey321")
 
         return res.status(201).json({ success: true, userResponse, token: token })
     } catch (error) {
@@ -45,7 +45,7 @@ export const signIn = async (req, res) => {
         }
 
         const userResponse = { email: userInDb.email, img: userInDb.img, name: userInDb.name, id: userInDb._id }
-        const token = jwt.sign({ name: userInDb.name }, "keykey321")
+        const token = jwt.sign({ email: userInDb.email }, "keykey321")
 
         return res.status(200).json({ success: true, user: userResponse, token: token })
     } catch (error) {
@@ -53,3 +53,7 @@ export const signIn = async (req, res) => {
     }
 }
 
+export const signInToken = (req, res) => {
+    const userResponse = { email: req.user.email, img: req.user.img, name: req.user.name, id: req.user._id }
+    res.status(200).json({ success: true, user: userResponse })
+}
