@@ -23,7 +23,7 @@ const schema =  joi.object({
         'sitring.max':"mail too long"
         
     }),
-    password: joi.string().min(8).max(20).pattern(new RegExp('^[a-zA-Z0-9][3,30]$')).required().messages({
+    password: joi.string().min(8).max(20)/*. pattern(new RegExp('^[a-zA-Z0-9]$')) */.required().messages({
         'string.name': "Field should be a text", 
         'string.empty': "Field is required",
         'string.min':"password too short",

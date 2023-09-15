@@ -6,23 +6,23 @@ export const signUp = async (req, res) => {
 
 
     try {
-        const { email, password } = req.body
-        const userInDb = await User.findOne({ email })
+        const payload = req.body
+        const userInDb = await User.findOne({ email: payload.email })
 
         if (userInDb) {
             return res.json({ success: false, error: "Email registrado" })
         }
 
-        const passwordHash = bcrypt.hashSync(password, 10)
+        const passwordHash = bcrypt.hashSync(payload.password, 10)
 
         const newObj = { ...req.body }
         newObj.password = passwordHash
 
         const newUser = await User.create(newObj)
 
-        const userResponse = { email: userInDb.email, img: userInDb.img, name: userInDb.name, id: userInDb._id }
+        const userResponse = { email: newUser.email, img: newUser.img, name: newUser.name, id: newUser._id }
 
-        const token = jwt.sign({ email: userInDb.email }, "keykey321")
+        const token = jwt.sign({ email: newUser.email }, "keykey321")
 
         return res.status(201).json({ success: true, userResponse, token: token })
     } catch (error) {
